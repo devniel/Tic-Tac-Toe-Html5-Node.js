@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="socket.io.js"></script>
+<script type="text/javascript" src="michi.js"></script>
+<script type="text/javascript">
+
+var socket = new io.Socket(null, {remenberTransport:false,port:8000});
+
+socket.connect();
+	
+socket.on("message",function(data){
+
+		if(data.action == "enter"){
+			var p = document.createElement("p");
+				p.innerHTML = "<strong>" + data.name + "</strong>" + " ha entrado.";
+				document.getElementById("log").appendChild(p);
+		}
+		else if(data.action == "choose"){
+			var p = document.createElement("p");
+				p.innerHTML = "<strong>" + data.player +  "</strong>" + "  escogió " + data.type;
+				document.getElementById("log").appendChild(p);
+		}
+		else if(data.action == "draw"){
+			
+			var coord = {
+				player : data.player,
+				layerX :  data.x,
+				layerY : data.y
+			}
+			
+			michi.drawFromOtherPlayer(coord);
+		}
+		else if(data.action == "WIN"){
+			
+				alert("Ganó " + data.type + " : " + data.name);
+			
+				michi.canvas.width = michi.canvas.width;
+				michi.drawTable();
+				michi.startBoxes();
+			
+		}
+});
+	
+	
+
+window.onload = function(){
+	
+	michi = new boardGame();
+
+	michi.drawTable();
+
+	michi.startBoxes();
+
+	document.getElementById("canvas").onclick = function(e){
+		michi.onclick(e);
+	}
+	
+	
+	document.getElementById("connect").addEventListener("click",function(){
+
+		if(document.getElementById("name").value != ""){
+			
+			var player = {
+				name : document.getElementById("name").value,
+				action : "enter"
+			}
+			
+			michi.setName(player.name);
+			socket.send(player);
+				
+			document.getElementById("types").style.display = "block";
+			document.getElementById("name").style.display = "none";
+			document.getElementById("connect").style.display = "none";
+			
+		}
+		else {
+			alert("Coloca tu nombre -_-!");
+		}
+		
+		
+		var botones = document.getElementsByTagName("button");
+
+		for(i in botones){
+	
+			botones[i].onclick = function(){
+				
+				action = {
+					player : player.name,
+					type : this.value,
+					action : "choose"
+				}
+				
+				michi.player = this.value;
+				
+				socket.send(action);
+			}
+		}
+		
+	},false);
+
+	
+}
+
+</script>
+
+</head>
+
+<body>
+
+
+<div id="board" style="width:300px;height:500px;float:left;">
+
+
+<canvas id="canvas" width="300" height="300" style="border:1px solid #CCC;">
+
+</canvas>
+
+<div id="types" style="display:none">
+    <button id="player1" value="O">O</button> <button id="player2" value="X">X</button>
+</div>
+<input id="name" type="text" placeholder="Coloca tu nombre"/><button id="connect">Entrar</button>
+</div>
+
+
+<div id="log" style="width:200px;height:400px;border:1px solid #CCC;float:left;margin-left:10px;font:10px Tahoma;padding:10px;">
+	<!--<p><strong>Jugador</strong> escogió círculo</p>-->
+</div>
+
+
+</body>
+
+</html>
