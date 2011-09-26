@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="socket.io.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="michi.js"></script>
+<link type="text/css" rel="stylesheet" href="style.css"></script>
+<link href='http://fonts.googleapis.com/css?family=Geo' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="michi.js"></script>
 <script type="text/javascript">
+var player = {
+	name : null,
+	type : null,
+	action : null,
+	enemy : null,
+	layerX : null,
+	layerY : null,
+	sessionId : null
+};
 
-var socket = new io.Socket(null, {remenberTransport:false,port:8000});
+var socket = io.connect('http://localhost');
 
-socket.connect();
-	
 socket.on("message",function(data){
-
+	
+		console.log(data);
+	
 		if(data.action == "enter"){
-			var p = document.createElement("p");
-				p.innerHTML = "<strong>" + data.name + "</strong>" + " ha entrado.";
-				document.getElementById("log").appendChild(p);
-		}
-		else if(data.action == "choose"){
-			var p = document.createElement("p");
-				p.innerHTML = "<strong>" + data.player +  "</strong>" + "  escogió " + data.type;
-				document.getElementById("log").appendChild(p);
-		}
-		else if(data.action == "draw"){
+			
+			player.sessionId = data.sessionId;	
+					
+		}else if(data.action == "draw"){
 			
 			var coord = {
-				player : data.player,
+				type : data.type,
 				layerX :  data.x,
 				layerY : data.y
 			}
@@ -40,65 +48,80 @@ socket.on("message",function(data){
 				michi.startBoxes();
 			
 		}
+		// NEW FUNCTIONS
+		else if(data.action == "wait"){
+			// WAITING
+			//alert("Jugador no encontrado, esperar");
+			// Update player data (type = "O")
+			player = data;
+			// Show player_waiting
+			
+			$("#player_waiting").show();
+		}
+		// LETS PLAY
+		else if(data.action == "play"){
+
+			//alert("jugador encontrado");
+			$("#player_waiting").hide();
+			$("#box").hide();
+						
+			if(player.sessionId != data.sessionId){
+				player.enemy = {
+					sessionId : data.sessionId,
+					name : data.name	
+				}
+			}else{
+				player = data;
+			}
+			
+			$(".p1 .name").text(player.name);
+			$(".p2 .name").text(player.enemy.name);			
+
+		}
 });
-	
-	
 
 window.onload = function(){
-	
+
+
+	// Load michi game
 	michi = new boardGame();
-
 	michi.drawTable();
-
 	michi.startBoxes();
 
-	document.getElementById("canvas").onclick = function(e){
-		michi.onclick(e);
-	}
-	
-	
-	document.getElementById("connect").addEventListener("click",function(){
-
-		if(document.getElementById("name").value != ""){
+	// Buttons
+	$("#play").click(function(){
+		if($("#nick").val() != null && $("#nick").val() != ""){		
 			
-			var player = {
-				name : document.getElementById("name").value,
-				action : "enter"
-			}
+			// Update player data
+			// Send data to the server
+			player.name = $("#nick").val();
+			player.action = "enter";
 			
+			// Set name in game
 			michi.setName(player.name);
-			socket.send(player);
-				
-			document.getElementById("types").style.display = "block";
-			document.getElementById("name").style.display = "none";
-			document.getElementById("connect").style.display = "none";
+
+			socket.json.send(player);
+
+			$("#play").hide();
+			$("#nick").hide();
+
+			$("#player_info").show();
+			$("#player_info").text("Hola " + player.name + " !");
 			
-		}
-		else {
-			alert("Coloca tu nombre -_-!");
+		}else{
+			alert("Coloca tu nick");
 		}
 		
-		
-		var botones = document.getElementsByTagName("button");
-
-		for(i in botones){
+	});
 	
-			botones[i].onclick = function(){
-				
-				action = {
-					player : player.name,
-					type : this.value,
-					action : "choose"
-				}
-				
-				michi.player = this.value;
-				
-				socket.send(action);
-			}
-		}
-		
-	},false);
+	
 
+	document.getElementById("canvas").onclick = function(e){
+		player.action = "draw";
+		player.x = e.layerX;
+		player.y = e.layerY;
+		michi.onclick(player);
+	}		
 	
 }
 
@@ -108,25 +131,53 @@ window.onload = function(){
 
 <body>
 
+<div id="box">
+	<br/>
+	<h3>Tic Tac Toe</h3>
+	<br/>
 
-<div id="board" style="width:300px;height:500px;float:left;">
+	<div id="start">
+		
+		<input id="nick" type="text" placeholder="Tu nick"/>
+		<button id="play">Jugar</button>
 
+		
+		<div id="player_info">
+		</div>
 
-<canvas id="canvas" width="300" height="300" style="border:1px solid #CCC;">
+		<div id="player_waiting">
+			Esperando jugador
+		</div>
+		
 
-</canvas>
-
-<div id="types" style="display:none">
-    <button id="player1" value="O">O</button> <button id="player2" value="X">X</button>
+	</div>
+	
+	
 </div>
-<input id="name" type="text" placeholder="Coloca tu nombre"/><button id="connect">Entrar</button>
+
+<div id="game">
+	
+	<h2>Tic Tac Toe</h2>
+
+	<canvas id="canvas" width="300" height="300">
+	Tu navegador no soporta html5
+	</canvas>
+
+	<div id="players">
+		<div class="player p1">
+			<div class="picture"></div>
+			<div class="name"></div>
+		</div>
+		<div id="vs">
+			VS
+		</div>
+		<div class="player p2">
+			<div class="picture"></div>
+			<div class="name"></div>
+		</div>
+	</div>
+
 </div>
-
-
-<div id="log" style="width:200px;height:400px;border:1px solid #CCC;float:left;margin-left:10px;font:10px Tahoma;padding:10px;">
-	<!--<p><strong>Jugador</strong> escogió círculo</p>-->
-</div>
-
 
 </body>
 

@@ -2,7 +2,7 @@
 /**
  * CEIDS
  * 
- * @author Daniel Flores <dnielf@hotmail.com>
+ * @author Daniel Flores
  * @license The MIT license.
  * @copyright Copyright (c) 2011 Stendev
 */
@@ -94,8 +94,6 @@ function box(obj,canvas,ctx,posx,posy,id){
 
 
 function boardGame(){
-	
-		this.player = null;
 
 		this.canvas = document.getElementById("canvas");
 
@@ -106,8 +104,6 @@ function boardGame(){
 		this.width = this.canvas.width;
 
 		this.boxes = [];
-		
-		this.name = null;
 		
 		this.setName = function(name){
 				this.name = name;
@@ -139,8 +135,6 @@ function boardGame(){
 
 		}
 
-
-
 		this.startBoxes = function(){
 
 			var bx = 0;
@@ -158,23 +152,13 @@ function boardGame(){
 
 
 
-		this.onclick = function(e){
-			
-			// DRAWED
-				var action = {
-						action : "draw",
-						player : this.player,
-						x : e.layerX,
-						y : e.layerY
-					}
-					
-				socket.send(action);
-			
+		this.onclick = function(_player){
+				socket.json.send(_player);
 		}
 		
 		this.drawFromOtherPlayer = function(e){
 			
-			if(e.player == "O"){
+			if(e.type == "O"){
 				
 				//alert(":o");
 
@@ -185,7 +169,7 @@ function boardGame(){
 				}
 				
 			}
-			else if(e.player == "X"){
+			else if(e.type == "X"){
 				
 				for(i in this.boxes){
 
@@ -197,102 +181,65 @@ function boardGame(){
 			this.review();
 			
 		}
-
-		this.select = function(player){
-			
-			this.player = player;
-			
-		}
-
+		
+		// UGLY CODE here XD
 
 		this.review = function(){
 
-				if(this.boxes[0].colored && this.boxes[1].colored && this.boxes[2].colored && ( this.boxes[0].type == this.player) && (this.boxes[1].type == this.player) && (this.boxes[2].type == this.player)){
+				if(this.boxes[0].colored && this.boxes[1].colored && this.boxes[2].colored && ( this.boxes[0].type == player.type) && (this.boxes[1].type == player.type) && (this.boxes[2].type == player.type)){
 					
-					action = {
-						action : "WIN",
-						type : this.player,
-						name : this.name
-					}
+					player.action = "WIN"
 					
-					socket.send(action);
+					socket.json.send(player);
 					
 				}
-				else if(this.boxes[3].colored && this.boxes[4].colored && this.boxes[5].colored && ( this.boxes[3].type == this.player) && (this.boxes[4].type == this.player) && (this.boxes[5].type == this.player)){
+				else if(this.boxes[3].colored && this.boxes[4].colored && this.boxes[5].colored && ( this.boxes[3].type == player.type) && (this.boxes[4].type == player.type) && (this.boxes[5].type == player.type)){
 					
-					action = {
-						action : "WIN",
-						type : this.player,
-						name : this.name
-					}
+					player.action = "WIN"
 					
-					socket.send(action);
+					socket.json.send(player);
 					
 				}
-				else if(this.boxes[6].colored && this.boxes[7].colored && this.boxes[8].colored && ( this.boxes[6].type == this.player) && (this.boxes[7].type == this.player) && (this.boxes[8].type == this.player)){
+				else if(this.boxes[6].colored && this.boxes[7].colored && this.boxes[8].colored && ( this.boxes[6].type == player.type) && (this.boxes[7].type == player.type) && (this.boxes[8].type == player.type)){
 					
-					action = {
-						action : "WIN",
-						type : this.player,
-						name : this.name
-					}
+					player.action = "WIN"
 					
-					socket.send(action);
+					socket.json.send(player);
 					
 				}
-				else if(this.boxes[0].colored && this.boxes[3].colored && this.boxes[6].colored && ( this.boxes[0].type == this.player) && (this.boxes[3].type == this.player) && (this.boxes[6].type == this.player)){
+				else if(this.boxes[0].colored && this.boxes[3].colored && this.boxes[6].colored && ( this.boxes[0].type == player.type) && (this.boxes[3].type == player.type) && (this.boxes[6].type == player.type)){
 					
-					action = {
-						action : "WIN",
-						type : this.player,
-						name : this.name
-					}
+					player.action = "WIN"
 					
-					socket.send(action);
+					socket.json.send(player);
 					
 				}
-				else if(this.boxes[1].colored && this.boxes[4].colored && this.boxes[7].colored && ( this.boxes[1].type == this.player) && (this.boxes[4].type == this.player) && (this.boxes[7].type == this.player)){
+				else if(this.boxes[1].colored && this.boxes[4].colored && this.boxes[7].colored && ( this.boxes[1].type == player.type) && (this.boxes[4].type == player.type) && (this.boxes[7].type == player.type)){
 					
-					action = {
-						action : "WIN",
-						type : this.player,
-						name : this.name
-					}
+					player.action = "WIN"
 					
-					socket.send(action);
+					socket.json.send(player);
 					
 				}
-				else if(this.boxes[2].colored && this.boxes[5].colored && this.boxes[8].colored && ( this.boxes[2].type == this.player) && (this.boxes[5].type == this.player) && (this.boxes[8].type == this.player)){
+				else if(this.boxes[2].colored && this.boxes[5].colored && this.boxes[8].colored && ( this.boxes[2].type == player.type) && (this.boxes[5].type == player.type) && (this.boxes[8].type == player.type)){
 					
-					action = {
-						action : "WIN",
-						type : this.player,
-						name : this.name
-					}
+					player.action = "WIN"
 					
-					socket.send(action);
+					socket.json.send(player);
 					
 				}
-				else if(this.boxes[0].colored && this.boxes[4].colored && this.boxes[8].colored && ( this.boxes[0].type == this.player) && (this.boxes[4].type == this.player) && (this.boxes[8].type == this.player)){
+				else if(this.boxes[0].colored && this.boxes[4].colored && this.boxes[8].colored && ( this.boxes[0].type == player.type) && (this.boxes[4].type == player.type) && (this.boxes[8].type == player.type)){
 					
-					action = {
-						action : "WIN",
-						type : this.player,
-						name : this.name
-					}
+					player.action = "WIN"
 					
-					socket.send(action);
+					socket.json.send(player);
 					
 				}
-				else if(this.boxes[2].colored && this.boxes[4].colored && this.boxes[6].colored && ( this.boxes[2].type == this.player) && (this.boxes[4].type == this.player) && (this.boxes[6].type == this.player)){
+				else if(this.boxes[2].colored && this.boxes[4].colored && this.boxes[6].colored && ( this.boxes[2].type == player.type) && (this.boxes[4].type == player.type) && (this.boxes[6].type == player.type)){
 					
-					action = {
-						action : "WIN",
-						type : this.player,
-						name : this.name
-					}
+					player.action = "WIN"
 					
-					socket.send(action);
+					socket.json.send(player);
 					
 				}
 		}
