@@ -1,0 +1,165 @@
+* {
+	margin:0;
+}
+
+#box {
+	width:600px;
+	height:600px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-top:-300px;
+	margin-left:-300px;
+	
+	border:5px solid #999;
+	border-radius:10px;
+
+	background:#FFF;
+
+	z-index:100;
+
+	background-image: -webkit-gradient(
+    		linear,
+    		left bottom,
+    		left top,
+    		color-stop(0.01, rgb(245,245,245)),
+    		color-stop(0.51, rgb(240,240,240))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(245,245,245) 1%,
+	    rgb(240,240,240) 51%
+	);
+
+}
+
+#box #start {
+	width:100%;
+	height:500px;
+	background:transparent;
+	position:relative;
+	text-align:center;
+}
+
+#box #start #play {
+	width:100px;
+	height:50px;
+	text-align:center;
+	position:relative;
+	font:15px "Geo";
+	color:#333;
+	display:block;
+	/*margin:10px;*/
+	margin:0 auto;
+}
+
+#box #start #nick {
+	padding:5px;
+	margin:0 auto;
+	margin-bottom:10px;
+}
+
+#box #start #player_info {
+	font:20px "Geo";
+	display:none;
+}
+
+#box #start #player_waiting {
+	margin-top:10px;
+	font:25px "Geo";
+	font-weight:bold;
+	color:#33506a;
+	padding-bottom:30px;
+	background:url("img/ajax-loader.gif") bottom center no-repeat;
+	display:none;
+}
+
+
+#game {
+	width:400px;
+	height:450px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-top:-225px;
+	margin-left:-200px;
+
+	border:1px solid #CCC;
+}
+
+/* TITLE */
+h1,h2,h3,h4,h5,h6 {
+	font-size:40px;
+	font-family:"Geo";
+	text-align:center;
+}
+
+#game #canvas {
+	width:300px;
+	height:300px;
+	background:#FFF;
+	border:3px solid #999;
+	border-radius:10px;
+
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-top:-150px;
+	margin-left:-150px;
+	float:left;
+}
+
+#game #players {
+
+	width:100%;
+	height:50px;
+	position:absolute;
+	/*top:400px;*/
+	bottom:0px;
+
+	
+}
+
+#game #players .player {
+	position:relative;
+	width:40%;
+	height:100%;
+	float:left;
+}
+
+#game #players #vs {
+	width:20%;
+	height:100%;
+	float:left;
+	font:30px "Geo";
+	font-weight:bold;
+	text-align:center;
+}
+
+#game #players .player .picture {
+	width:30%;
+	height:100%;
+	float:left;
+	background:trasparent;
+}
+
+#game #players .player .name {
+	width:70%;
+	height:100%;
+	float:right;
+}
+
+#game #players .p1 {
+	float:left;
+	font:20px "Geo";
+	line-height : 50px;
+	text-align:center;
+}
+
+#game #players .p2 {
+	float:right;
+	font:20px "Geo";
+	line-height:50px;
+	/*text-align:center;*/
+}
+
