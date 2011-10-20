@@ -13,6 +13,8 @@ var server = http.createServer(function(req,res){
 
 	if(uri == "/") filename = path.join(__dirname,"/michi.html");
 
+	// Filename also passes the styles, images and scripts, thats the reason because I write the file in binary format.
+	// Otherwise you can use res.write(file,'text/html') , res.write(file,'application/json'), etc ;
 	path.exists(filename,function(exists){
 		
 		if(!exists){
@@ -34,6 +36,7 @@ var server = http.createServer(function(req,res){
 
 });
 
+// you can pase PORT as an argument in the shell
 var PORT = process.env.PORT || 3000;
 
 server.listen(PORT,function(){
@@ -56,7 +59,7 @@ io.sockets.on('connection', function(socket){
 				player.sessionId = socket.id;
 				socket.json.send(player);
 				
-				// Found another player waiting
+				// Found another waiting player.
 				var found = false;
 
 				for(var i in players){
@@ -77,7 +80,7 @@ io.sockets.on('connection', function(socket){
 					}
 				}
 				
-				// If didn't find another player waiting
+				// If didn't find another waiting player.
 				if(!found){
 					
 					player.action = "wait";
