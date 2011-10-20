@@ -4,8 +4,6 @@ path = require('path'),
 fs = require('fs'),
 sys = require('sys');
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 // In this case, I don't use Express.js for learning reasons.
 
 var server = http.createServer(function(req,res){
