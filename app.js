@@ -15,6 +15,7 @@ var server = http.createServer(function(req,res){
 
 	// Filename also passes the styles, images and scripts, thats the reason because I write the file in binary format.
 	// Otherwise you can use res.write(file,'text/html') , res.write(file,'application/json'), etc ;
+
 	path.exists(filename,function(exists){
 		
 		if(!exists){
@@ -26,7 +27,16 @@ var server = http.createServer(function(req,res){
 					res.writeHead(500,{'Content-Type':'text/plain'});
 					res.end(err + "\n");
 				}else{
-					res.writeHead(200);
+						var type;
+						if(filename.match(/(.html)$/i) != null){
+							type = 'text/html';
+						}else if(filename.match(/(.js)$/i) != null){
+							type = 'text/javascript';
+						}else if(filename.match(/(.css)$/i) != null){
+							type = 'text/css';
+						}
+
+					res.writeHead(200, {'Content-Type': type });
 					res.write(file,'binary');
 					res.end();
 				}
