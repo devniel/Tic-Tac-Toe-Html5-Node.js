@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD
 <link type="text/css" rel="stylesheet" href="style.css"></script>
 <link href='http://fonts.googleapis.com/css?family=Geo' rel='stylesheet' type='text/css'>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
 <script type="text/javascript" src="./socket.io/socket.io.js"></script>
+=======
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="michi.js"></script>
+<link type="text/css" rel="stylesheet" href="style.css"></script>
+<link href='http://fonts.googleapis.com/css?family=Geo' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+>>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 <script type="text/javascript" src="michi.js"></script>
 <script type="text/javascript">
 var player = {
@@ -17,7 +26,11 @@ var player = {
 	sessionId : null
 };
 
+<<<<<<< HEAD
 var socket = io.connect();
+=======
+var socket = io.connect('http://localhost');
+>>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 
 socket.on("message",function(data){
 	

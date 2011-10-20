@@ -4,6 +4,7 @@ path = require('path'),
 fs = require('fs'),
 sys = require('sys');
 
+<<<<<<< HEAD
 // In this case, I don't use Express.js for learning reasons.
 
 var server = http.createServer(function(req,res){
@@ -56,12 +57,49 @@ server.listen(PORT,function(){
 var io = require('socket.io').listen(server);
 
 var players = new Array();
+=======
+server = http.createServer(function(req,res){
+	
+	var uri = url.parse(req.url).pathname;
+	var filename = path.join(process.cwd(),uri);
+	
+	path.exists(filename,function(exists){
+		if(!exists){
+		res.writeHead(404,{'Content-Type':'text/plain'});
+		res.end("No encontrado :(");
+		}
+		
+		fs.readFile(filename,"binary",function(err,file){
+			
+		if(err){
+				res.writeHead(500,{'Content-Type':'text/plain'});
+				res.end(err + "\n");
+				return;
+		}
+		
+		res.writeHead(200);
+		res.write(file,'binary');
+		res.end();
+		});
+	});
+});
+
+server.listen(8000);
+
+var io = require('socket.io').listen(server);
+
+var players = [];
+>>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 
 io.sockets.on('connection', function(socket){
 	
   	socket.on('message', function(player){
 		
+<<<<<<< HEAD
 			console.log("Message : " + player);
+=======
+			console.log("MENSAJE : " + player);
+>>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 		
 			if(player.action == "enter"){
 			
@@ -69,10 +107,17 @@ io.sockets.on('connection', function(socket){
 				player.sessionId = socket.id;
 				socket.json.send(player);
 				
+<<<<<<< HEAD
 				// Found another waiting player.
 				var found = false;
 
 				for(var i in players){
+=======
+				// Found another player waiting
+				var found = false;
+
+				for(i in players){
+>>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 					if(players[i].enemy == null){
 						
 						player.enemy = {
@@ -90,7 +135,11 @@ io.sockets.on('connection', function(socket){
 					}
 				}
 				
+<<<<<<< HEAD
 				// If didn't find another waiting player.
+=======
+				// If didn't find another player waiting
+>>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 				if(!found){
 					
 					player.action = "wait";
@@ -118,7 +167,12 @@ io.sockets.on('connection', function(socket){
 				}else{*/
 					socket.json.send(player);
 					io.sockets.sockets[player.enemy.sessionId].json.send(player);
+<<<<<<< HEAD
 				//}	
+=======
+				//}
+					
+>>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 			}
 					
 	});
