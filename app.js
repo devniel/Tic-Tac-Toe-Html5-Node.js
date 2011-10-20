@@ -5,6 +5,7 @@ fs = require('fs'),
 sys = require('sys');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // In this case, I don't use Express.js for learning reasons.
 
 var server = http.createServer(function(req,res){
@@ -57,7 +58,7 @@ server.listen(PORT,function(){
 var io = require('socket.io').listen(server);
 
 var players = new Array();
-=======
+
 server = http.createServer(function(req,res){
 	
 	var uri = url.parse(req.url).pathname;
@@ -89,35 +90,27 @@ server.listen(8000);
 var io = require('socket.io').listen(server);
 
 var players = [];
->>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 
 io.sockets.on('connection', function(socket){
 	
   	socket.on('message', function(player){
 		
-<<<<<<< HEAD
 			console.log("Message : " + player);
-=======
-			console.log("MENSAJE : " + player);
->>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 		
 			if(player.action == "enter"){
 			
 				// A new player, send data to the web.
 				player.sessionId = socket.id;
 				socket.json.send(player);
-				
-<<<<<<< HEAD
+
 				// Found another waiting player.
 				var found = false;
 
 				for(var i in players){
-=======
+
 				// Found another player waiting
 				var found = false;
 
-				for(i in players){
->>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 					if(players[i].enemy == null){
 						
 						player.enemy = {
@@ -135,11 +128,8 @@ io.sockets.on('connection', function(socket){
 					}
 				}
 				
-<<<<<<< HEAD
-				// If didn't find another waiting player.
-=======
-				// If didn't find another player waiting
->>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
+				// If didn't find another waiting player
+
 				if(!found){
 					
 					player.action = "wait";
@@ -167,12 +157,8 @@ io.sockets.on('connection', function(socket){
 				}else{*/
 					socket.json.send(player);
 					io.sockets.sockets[player.enemy.sessionId].json.send(player);
-<<<<<<< HEAD
 				//}	
-=======
 				//}
-					
->>>>>>> 75a201efc724aa58939af1b7f49085899aff9344
 			}
 					
 	});
